@@ -14,6 +14,7 @@ def json_register():
     if request.method == 'POST':
         content = request.get_json()
         name = content['name']
+        firstname = content['firstname']
         email = content['email']
         username = content['username']
         password = sha256_crypt.encrypt(str(content['password']))
@@ -24,7 +25,7 @@ def json_register():
 
 
         #execute query
-        cur.execute("INSERT INTO users(name,email,username,password) VALUES(%s,%s,%s,%s)",(name,email,username,password))
+        cur.execute("INSERT INTO users(naam,voornaam,email,username,password) VALUES(%s,,%s%s,%s,%s)",(name,firstname,email,username,password))
 
         #commit to Datebase
         mysql.connection.commit()
