@@ -7,4 +7,4 @@ index_bp = Blueprint(
 
 @index_bp.route("/")
 def index():
-    return "<h1>MY SMART IOT GIP</h1>"  bvb
+    return "<h1>MY SMART IOT GIP</h1>"  
