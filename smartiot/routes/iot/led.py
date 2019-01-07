@@ -7,12 +7,13 @@ iot_led_bp = Blueprint(
 
 @iot_led_bp.route("/led",methods=['POST'])
 def led_ON_OFF():
+    led_pin = 7
     content = request.get_json()
     if content['led'] == "0":
         GPIO.setwarnings(False) 
         GPIO.setmode(GPIO.BOARD) 
-        GPIO.setup(8, GPIO.OUT, initial=GPIO.LOW) 
-        GPIO.output(8, GPIO.LOW) 
+        GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.LOW) 
+        GPIO.output(led_pin, GPIO.LOW) 
 
         print("ledoff")
         return ""
@@ -20,8 +21,8 @@ def led_ON_OFF():
     if content['led'] == "1":
         GPIO.setwarnings(False) 
         GPIO.setmode(GPIO.BOARD) 
-        GPIO.setup(8, GPIO.OUT, initial=GPIO.HIGH)        
-        GPIO.output(8, GPIO.HIGH) 
+        GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.HIGH)        
+        GPIO.output(led_pin, GPIO.HIGH) 
 
         print("ledon")
         return ""
