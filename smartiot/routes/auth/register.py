@@ -12,35 +12,36 @@ register_bp = Blueprint(
 )
 
 
-@register_bp.route('/register',methods=['GET','POST'])
-def json_register():     
-    if request.method == 'POST':
-        content = request.get_json()
-        name = content['name']
-        email = content['email']
-        username = content['username']
-        password = sha256_crypt.encrypt(str(content['password']))
-        print(content)
-        #create Cursor
-        cur = mysql.connection.cursor()
-        print("test")
+@register_bp.route('/register',methods=['POST'])
+def json_register():  
+    content = request.get_json()
+    name = content['name']
+    email = content['email']
+    username = content['username']
+    password = sha256_crypt.encrypt(str(content['password']))
+    print(content)
+    print(password)
+    #create Cursor
+    cur = mysql.connection.cursor()
+    print("test")
+
+    # #check if username is taken 
+    # cur.execute("SELECT * FROM users WHERE username = (%s)",(username))
+    # if int(check) > 0 :
+    #     return json_response(status = "That username is already taken, please choose another")
 
 
-        #execute query
-        cur.execute("INSERT INTO users(naam,email,username,password) VALUES(%s,%s,%s,%s)",(name,email,username,password))
+    #execute query
+    cur.execute("INSERT INTO users(naam,email,username,password,role) VALUES(%s,%s,%s,%s,%s)",(name,email,username,password,"normal_user"))
 
-        #commit to Datebase
-        mysql.connection.commit()
+    #commit to Datebase
+    mysql.connection.commit()
 
-        #close connection
-        cur.close()
-        print("POST request Register")
+    #close connection
+    cur.close()
+    print("POST request Register")
 
-        return json_response(username = username ,status ="true")
+    return json_response(username = username ,status ="true")         
 
-          
-
-    if request.method == 'GET':
-        print("GET request")
-        return "GET request to Register"
-    return ""
+    
+   
