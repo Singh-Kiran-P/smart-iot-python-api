@@ -14,7 +14,7 @@ register_bp = Blueprint(
 
 @register_bp.route('/register',methods=['POST'])
 def json_register():  
-    content = request.get_json()
+    content = request.get_json(force=True)
     name = content['name']
     email = content['email']
     username = content['username']
@@ -41,7 +41,7 @@ def json_register():
     cur.close()
     print("POST request Register")
 
-    return json_response(username = username ,status ="true")         
+    return json_response(username = username)         
 
     
    

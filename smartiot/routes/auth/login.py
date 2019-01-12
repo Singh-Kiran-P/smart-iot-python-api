@@ -14,7 +14,7 @@ login_bp = Blueprint(
 
 @login_bp.route('/login' , methods=['POST'])
 def login_request():
-    content = request.get_json()  
+    content = request.get_json(force=True)  
     
     username_candidate = content['username']
     password_candidate = content['password']
