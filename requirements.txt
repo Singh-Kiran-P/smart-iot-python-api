@@ -3,3 +3,4 @@ flask
 flask_json
 RPi.GPIO
 flask-security
+gunicorn
