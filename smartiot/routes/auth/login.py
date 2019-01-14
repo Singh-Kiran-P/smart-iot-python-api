@@ -3,6 +3,7 @@ from smartiot.bin.config.db_config import mysql
 from flask import Flask,render_template,flash,redirect,session,url_for,logging,request,Blueprint,json,session
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 
+from werkzeug.security import generate_password_hash, check_password_hash
 from passlib.hash import sha256_crypt
 
 
@@ -37,7 +38,7 @@ def login_request():
 
 
         #compare password
-        if sha256_crypt.verify(password_candidate,password):
+        if check_password_hash(password, password_candidate):
             # Passed
             session['logged_in'] = True
             session['id'] = id

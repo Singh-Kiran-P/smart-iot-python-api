@@ -3,6 +3,9 @@ from smartiot.bin.config.db_config import mysql
 from flask import Flask,render_template,flash,redirect,session,url_for,logging,request,Blueprint,json
 from flask_json import FlaskJSON, JsonError, json_response, as_json
 
+
+from werkzeug.security import generate_password_hash, check_password_hash
+
 from passlib.hash import sha256_crypt
 
 
@@ -18,7 +21,7 @@ def json_register():
     name = content['name']
     email = content['email']
     username = content['username']
-    password = sha256_crypt.encrypt(str(content['password']))
+    password = generate_password_hash(content['password'], method='sha256')
     print(content)
     print(password)
     #create Cursor
