@@ -14,6 +14,6 @@ from smartiot.routes.iot.pir_sensor import iot_pir_bp
 
 app.register_blueprint(register_bp,url_prefix='/api/users/')
 app.register_blueprint(index_bp)
-app.register_blueprint(iot_led_bp,url_prefix='/iot')
-app.register_blueprint(iot_pir_bp,url_prefix='/iot')
+app.register_blueprint(iot_led_bp,url_prefix='/api/iot')
+app.register_blueprint(iot_pir_bp,url_prefix='/api/iot')
 app.register_blueprint(login_bp,url_prefix='/api/users/')

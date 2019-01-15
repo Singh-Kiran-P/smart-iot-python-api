@@ -28,10 +28,14 @@ def json_register():
     cur = mysql.connection.cursor()
     print("test")
 
-    # #check if username is taken 
-    # cur.execute("SELECT * FROM users WHERE username = (%s)",(username))
-    # if int(check) > 0 :
-    #     return json_response(status = "That username is already taken, please choose another")
+    #check if username is taken 
+    checkUsername = cur.execute("SELECT * FROM users WHERE username = (%s)",[username])
+    if int(checkUsername) > 0 :
+        return json_response(message = "That username is already taken, please choose another",status = 901)
+
+    checkEmail = cur.execute("SELECT * FROM users WHERE email = (%s)",[email])
+    if int(checkEmail) > 0 :
+        return json_response(message = "This email is already in use, please choose another ",status = 902)
 
 
     #execute query
@@ -44,7 +48,7 @@ def json_register():
     cur.close()
     print("POST request Register")
 
-    return json_response(username = username)         
+    return json_response(status = 200,message="User creaded")         
 
     
    

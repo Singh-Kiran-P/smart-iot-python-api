@@ -17,14 +17,19 @@ login_bp = Blueprint(
 def login_request():
     content = request.get_json(force=True)  
     
-    username_candidate = content['username']
+    user_candidate = content['username']
     password_candidate = content['password']
 
     #create a cursur 
     cur = mysql.connection.cursor()
+    
+    #get user by email
+    if '@' in user_candidate:
+        result  = cur.execute("SELECT * FROM users WHERE email = %s",[user_candidate])
 
     #get user by username
-    result  = cur.execute("SELECT * FROM users WHERE username = %s",[username_candidate])
+    else:
+        result  = cur.execute("SELECT * FROM users WHERE username = %s",[user_candidate])
 
     if result > 0:
         #get stored hash
@@ -55,21 +60,38 @@ def login_request():
         email = email,
         username = username,
         role = role,
-        message="You are now logged in"
+        message="You are now logged in",
+        status = 200
         ) 
         else:
             app.logger.info('PASSWORD NOT MATCHED')    
 
-            #response
-            return json_response(success= "flase",message = "Password not matched")
+            #response password not matched
+            return json_response( 
+        id = None,
+        naam = None,
+        email = None,
+        username = None,
+        role = None,
+        message="Password not matched",
+        status = 409
+        ) 
         
         #Close connection
         cur.close()
     else:
         app.logger.info('NO USER')
 
-        #response
-        return json_response(success= "flase",message = "User not found")
+        #response user not found
+        return json_response( 
+        id = None,
+        naam = None,
+        email = None,
+        username = None,
+        role = None,
+        message="user not found",
+        status = 410
+        ) 
 
 
 @login_bp.route('/logout')

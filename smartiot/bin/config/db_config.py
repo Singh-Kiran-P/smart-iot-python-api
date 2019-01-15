@@ -10,6 +10,8 @@ from flask_mysqldb import MySQL
 # print(dotenv_path)
 
 # # Accessing variables.
+
+
 # host = os.getenv('MYSQL_HOST')
 # user = os.getenv('MYSQL_USER')
 # password = os.getenv('MYSQL_PASSWORD')
