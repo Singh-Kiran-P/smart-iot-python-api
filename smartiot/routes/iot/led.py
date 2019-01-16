@@ -6,40 +6,58 @@ iot_led_bp = Blueprint(
     __name__    
 )
 
+#define led oin
+led_pin = 7
+
+
 @iot_led_bp.route("/led",methods=['POST'])
 def led_ON_OFF():
-    led_pin = 7
+    
     content = request.get_json()
     led = content['led']
     userid = content['userId']
     permisson =""
    
     if led == "0":
-        GPIO.setwarnings(False) 
-        GPIO.setmode(GPIO.BOARD) 
-        GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.LOW) 
-        GPIO.output(led_pin, GPIO.LOW) 
-
-        print("ledoff")
-
-        #response
-        return json_response( 
-        message="Led is OFF",
-        permission ="granted",
-        status = 200
-        ) 
+       return ledOff()
+       
 
     if led == "1":
-        GPIO.setwarnings(False) 
-        GPIO.setmode(GPIO.BOARD) 
-        GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.HIGH)        
-        GPIO.output(led_pin, GPIO.HIGH) 
+        return ledOn()
+        
 
-        print("ledon")
 
-        #response
-        return json_response( 
-        message="Led is ON",
-        permission ="granted",
-        status = 200
-        ) 
+
+# led process
+def ledOn():
+    GPIO.setwarnings(False) 
+    GPIO.setmode(GPIO.BOARD) 
+    GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.HIGH) 
+    GPIO.output(led_pin, GPIO.HIGH) 
+
+    
+
+    print("ledoff")
+
+    #response
+    return json_response( 
+    message="Led is ON",
+    permission ="granted",
+    status = 200
+    ) 
+
+def ledOff():
+    GPIO.setwarnings(False) 
+    GPIO.setmode(GPIO.BOARD) 
+    GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.LOW) 
+    GPIO.output(led_pin, GPIO.LOW) 
+
+    print("ledoff")
+
+    #response
+    return json_response( 
+    message="Led is OFF",
+    permission ="granted",
+    status = 200
+    ) 
+       
