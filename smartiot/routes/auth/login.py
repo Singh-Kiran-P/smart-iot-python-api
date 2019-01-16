@@ -35,7 +35,7 @@ def login_request():
         #get stored hash
         data = cur.fetchone()
         id = data['id']
-        naam = data['naam']
+        naam = data['name']
         email = data['email']
         username = data['username']
         password = data['password']

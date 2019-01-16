@@ -39,7 +39,7 @@ def json_register():
 
 
     #execute query
-    cur.execute("INSERT INTO users(naam,email,username,password,role) VALUES(%s,%s,%s,%s,%s)",(name,email,username,password,"normal_user"))
+    cur.execute("INSERT INTO users(name,email,username,password,role) VALUES(%s,%s,%s,%s,%s)",(name,email,username,password,"normal_user"))
 
     #commit to Datebase
     mysql.connection.commit()
