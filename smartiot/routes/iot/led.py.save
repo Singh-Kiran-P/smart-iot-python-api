@@ -24,7 +24,7 @@ def led_ON_OFF():
 
         #response
         return json_response( 
-        message="Led is OFF",
+        message="Led is ON",
         permission ="granted",
         status = 200
         ) 
@@ -41,5 +41,6 @@ def led_ON_OFF():
         return json_response( 
         message="Led is ON",
         permission ="granted",
-        status = 200
+        status = 200,
+	
         ) 
