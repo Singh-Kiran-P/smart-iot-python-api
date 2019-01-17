@@ -32,16 +32,56 @@ def led_ON_OFF():
 
     if permissions is "granted":
         if led == "0":
+            #mysql
+            #execute query
+            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
+            print(str(sql))
+            #create a cursur             
+            cur = mysql.connection.cursor()
+            result  = cur.execute(sql,("off","state",endpoint,userid))
+            #commit to Datebase
+            mysql.connection.commit()
+
+         
+
             return ledOff()
             print('granted')
+            
+
 
 
         if led == "1":
+            #mysql
+            #execute query
+            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
+            print(str(sql))
+            #create a cursur             
+            cur = mysql.connection.cursor()
+            result  = cur.execute(sql,("on","state",endpoint,userid))
+            #commit to Datebase
+            mysql.connection.commit()
+
+            #close connection
+            cur.close()
+
             return ledOn()
             print('granted')
 
 
     if permissions is "denied":
+
+        #mysql
+        #execute query
+        sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES(%s,'','',%s,'1',%s)"
+        print(str(sql))
+        #create a cursur             
+        cur = mysql.connection.cursor()
+        result  = cur.execute(sql,("Permission Denied",endpoint,userid))
+        #commit to Datebase
+        mysql.connection.commit()
+        #close connection
+        cur.close()
+
         #response
         return json_response( 
         message="Permission denied for this user",
