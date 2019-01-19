@@ -5,17 +5,17 @@ from smartiot.routes.route_Permissions.userPermissions import getPermissions
 import RPi.GPIO as GPIO # Import Raspberry Pi GPIO library
 import time
 
-iot_led_bp = Blueprint(
-    'iot_led_bp',
+iot_ultraSonic_bp = Blueprint(
+    'iot_ultra-sonic_bp',
     __name__    
 )
 
 #define led oin
-led01_pin = 7
+led_pin = 7
 
-@iot_led_bp.route("/led",methods=['POST'])
-def led_ON_OFF():
-    
+@iot_ultraSonic_bp.route("/ultra",methods=['POST'])
+def ultraSonic():
+     
     try:
         content = request.get_json()
         action = content['action']
@@ -32,26 +32,37 @@ def led_ON_OFF():
     print(str(permissions))
 
     if permissions is "granted":
-        if action == "0":
+        print('granted')
+        if action == "measure":
             #mysql
             #execute query
-            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
+            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'2',%s)"
             print(str(sql))
+            GPIO.cleanup()
+            #get data from sensor 
+            distance = measure_average() 
+            d=round(distance ,2)
+            print( "Distance : {0} cm".format(d))
+            distance_cm = format(d)
             #create a cursur             
             cur = mysql.connection.cursor()
-            result  = cur.execute(sql,("off","state",endpoint,userid))
+            result  = cur.execute(sql,(distance_cm,"proximity",endpoint,userid))
             #commit to Datebase
             mysql.connection.commit()
 
          
 
-            return ledOff()
-            print('granted')
+            return json_response(
+                distance = distance_cm,
+                message = "Distance in cm",
+                status  =200
+                )
+           
             
 
 
 
-        if action == "1":
+        if action == "":#other fuctions
             #mysql
             #execute query
             sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
@@ -65,7 +76,7 @@ def led_ON_OFF():
             #close connection
             cur.close()
 
-            return ledOn()
+            return 
             print('granted')
 
 
@@ -85,43 +96,55 @@ def led_ON_OFF():
 
         #response
         return json_response( 
+        distance = "",
         message="Permission denied for this user",
         status = 403
         ) 
         print('denied')
-    return"" 
-
-
-
-# led process
-def ledOn():
-    GPIO.setwarnings(False) 
-    GPIO.setmode(GPIO.BOARD) 
-    GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.HIGH) 
-    GPIO.output(led01_pin, GPIO.HIGH) 
-
     
 
-    print("ledon")
 
-    #response
-    return json_response( 
-    message="Led is ON",
-    status = 200
-    ) 
+# measure distance
 
-def ledOff():
-    GPIO.setwarnings(False) 
-    GPIO.setmode(GPIO.BOARD) 
-    GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.LOW) 
-    GPIO.output(led01_pin, GPIO.LOW) 
+def measure():
+    GPIO.setwarnings(False)
+    GPIO.setmode(GPIO.BCM)
+    GPIO_TRIGGER = 23
+    GPIO_ECHO    = 24
+    print ("Ultrasonic Measurement")
+    GPIO.setup(GPIO_TRIGGER,GPIO.OUT)  # Trigger
+    GPIO.setup(GPIO_ECHO,GPIO.IN)      # Echo
+    # Set trigger to False (Low)
+    GPIO.output(GPIO_TRIGGER, False)
 
-    print("ledoff")
+    # This function measures a distance
+    GPIO.output(GPIO_TRIGGER, True)
+    time.sleep(0.00001)
+    GPIO.output(GPIO_TRIGGER, False)
+    start = time.time()
 
-    #response
-    return json_response( 
-    message="Led is OFF",
-    status = 200
-    ) 
+    while GPIO.input(GPIO_ECHO)==0:
+        start = time.time()
 
+    while GPIO.input(GPIO_ECHO)==1:
+        stop = time.time()
+
+    elapsed = stop-start
+    distance = (elapsed * 34300)/2
+
+    return distance
+
+def measure_average():
+    # This function takes 3 measurements and
+    # returns the average.
+    distance1=measure()
+    time.sleep(0.1)
+    distance2=measure()
+    time.sleep(0.1)
+    distance3=measure()
+    distance = distance1 + distance2 + distance3
+    distance = distance / 3
+    return distance
+
+  
 

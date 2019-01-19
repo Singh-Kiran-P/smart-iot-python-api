@@ -4,7 +4,7 @@ import ptvsd
 
 
 app = Flask(__name__)
-app.debug = True
+app.config.from_pyfile('bin/config/flask_config.cfg')
 FlaskJSON(app)
 
 from smartiot.routes.auth.register import register_bp
@@ -12,10 +12,14 @@ from smartiot.routes.auth.login import login_bp
 from smartiot.routes.index import index_bp
 from smartiot.routes.iot.led import iot_led_bp
 from smartiot.routes.iot.pir_sensor import iot_pir_bp
+from smartiot.routes.iot.ultraSonic import iot_ultraSonic_bp
 
 
-app.register_blueprint(register_bp,url_prefix='/api/users/')
 app.register_blueprint(index_bp)
+app.register_blueprint(register_bp,url_prefix='/api/users/')
+app.register_blueprint(login_bp,url_prefix='/api/users/')
+
+#settings iot sensors and stuff
 app.register_blueprint(iot_led_bp,url_prefix='/api/iot')
 app.register_blueprint(iot_pir_bp,url_prefix='/api/iot')
-app.register_blueprint(login_bp,url_prefix='/api/users/')
+app.register_blueprint(iot_ultraSonic_bp,url_prefix='/api/iot')

@@ -1,6 +1,7 @@
 from smartiot import app
 from flask_mysqldb import MySQL
 
+
 # #.env setting up
 # import os
 # from os.path import join, dirname,abspath
