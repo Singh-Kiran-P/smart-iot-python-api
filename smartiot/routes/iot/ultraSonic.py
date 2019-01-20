@@ -108,9 +108,9 @@ def ultraSonic():
 
 def measure():
     GPIO.setwarnings(False)
-    GPIO.setmode(GPIO.BCM)
-    GPIO_TRIGGER = 23
-    GPIO_ECHO    = 24
+    GPIO.setmode(GPIO.BOARD) 
+    GPIO_TRIGGER = 15
+    GPIO_ECHO    = 16
     print ("Ultrasonic Measurement")
     GPIO.setup(GPIO_TRIGGER,GPIO.OUT)  # Trigger
     GPIO.setup(GPIO_ECHO,GPIO.IN)      # Echo

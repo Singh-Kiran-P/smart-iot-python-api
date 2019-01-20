@@ -2,6 +2,8 @@ from smartiot import app
 from smartiot.bin.config.db_config import mysql
 from flask import Flask,render_template,flash,redirect,session,url_for,logging,request,Blueprint,json
 from flask_json import FlaskJSON, JsonError, json_response, as_json
+from flask_mail import Mail, Message
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -14,6 +16,20 @@ register_bp = Blueprint(
     __name__    
 )
 
+app.config.update(
+	DEBUG=True,
+	#EMAIL SETTINGS
+	MAIL_SERVER='smtp.gmail.com',
+	MAIL_PORT=465,
+	MAIL_USE_SSL=True,
+	MAIL_USERNAME = 'smart.iot.singh@gmail.com',
+	MAIL_PASSWORD = 'Singh,iot280'
+	)
+
+mail = Mail(app)
+
+s = URLSafeTimedSerializer('smartiot.singh')
+
 
 @register_bp.route('/register',methods=['POST'])
 def json_register():  
@@ -24,6 +40,7 @@ def json_register():
     password = generate_password_hash(content['password'], method='sha256')
     print(content)
     print(password)
+
     #create Cursor
     cur = mysql.connection.cursor()
     print("test")
@@ -48,7 +65,14 @@ def json_register():
     cur.close()
     print("POST request Register")
 
-    return json_response(status = 200,message="User creaded")         
+    #send confirm email to user
+    token = s.dumps(email, salt='email-confirm')#generate email token remind salt
+    msg = Message('Email Confirmation',sender='singh@singhthebeast.com',recipients=[email])
+    link = url_for('confirm_email.confirm_email', token=token, external=True)
+    msg.html = render_template('emails/confirm_email.html',link = link)
+    mail.send(msg)
+
+    return json_response(status = 200,message="Confirm email Send to "+email)         
 
     
    
