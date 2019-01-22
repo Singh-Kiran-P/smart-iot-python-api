@@ -15,9 +15,16 @@ index_bp = Blueprint(
 def index():
     return render_template('home.html')
 
-@index_bp.route("/download/smartiotapk")
+@index_bp.route("/release/smartiot.apk")
 def downloadAPK():
     try:    
         return send_file('routes/downloads/smartiot.apk', attachment_filename='smart_0.1.apk')
+    except Exception as e:
+        return str(e)
+
+@index_bp.route("/release/smartiot.exe")
+def downloadEXE():
+    try:    
+        return send_file('routes/downloads/smartiot.exe', attachment_filename='smart_0.1.exe')
     except Exception as e:
         return str(e)
