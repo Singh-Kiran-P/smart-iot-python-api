@@ -93,7 +93,7 @@ def login_request():
             #response
             return json_response( 
         id = id,
-        naam = naam,
+        name = naam,
         email = email,
         username = username,
         role = role,
