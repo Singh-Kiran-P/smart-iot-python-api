@@ -1,0 +1,8 @@
+flask_mysqldb
+flask
+flask_json
+RPi.GPIO
+flask-security
+gunicorn
+Werkzeug
+ptvsd
