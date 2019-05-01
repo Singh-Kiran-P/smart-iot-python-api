@@ -18,6 +18,7 @@ from smartiot.routes.auth.confirm import confirm_email_bp
 from smartiot.routes.iot.led import iot_led_bp
 from smartiot.routes.iot.pir_sensor import iot_pir_bp
 from smartiot.routes.iot.ultraSonic import iot_ultraSonic_bp
+from smartiot.routes.iot.temp_sensor import iot_temp_bp
 
 
 app.register_blueprint(index_bp)
@@ -31,3 +32,4 @@ app.register_blueprint(confirm_email_bp,url_prefix='/api/users/')
 app.register_blueprint(iot_led_bp,url_prefix='/api/iot')
 app.register_blueprint(iot_pir_bp,url_prefix='/api/iot')
 app.register_blueprint(iot_ultraSonic_bp,url_prefix='/api/iot')
+app.register_blueprint(iot_temp_bp,url_prefix='/api/iot')

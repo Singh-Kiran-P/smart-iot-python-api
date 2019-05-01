@@ -40,12 +40,12 @@ def login_request():
         data = cur.fetchone()
         email = data['email']
 
-        #send confirm email to user
-        token = s.dumps(email, salt='email-confirm')#generate email token remind salt
-        msg = Message('Email Confirmation',sender='singh@singhthebeast.com',recipients=[email])
-        link = url_for('confirm_email.confirm_email', token=token, external=True)
-        msg.html = render_template('emails/confirm_email.html',link = link)
-        mail.send(msg)
+        # #send confirm email to user
+        # token = s.dumps(email, salt='email-confirm')#generate email token remind salt
+        # msg = Message('Email Confirmation',sender='singh@singhthebeast.com',recipients=[email])
+        # link = url_for('confirm_email.confirm_email', token=token, external=True)
+        # msg.html = render_template('emails/confirm_email.html',link = link)
+        # mail.send(msg)
 
         return json_response( 
         id = None,
@@ -53,7 +53,7 @@ def login_request():
         email = None,
         username = None,
         role = None,
-        message="Email is not confirmed. A email is send to your email = " +email,
+        message="Email is not confirmed. Please check your email " +email,
         status = 409
         ) 
         print("########################################################################################")

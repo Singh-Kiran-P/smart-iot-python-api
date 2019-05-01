@@ -45,7 +45,7 @@ def led_ON_OFF():
 
          
 
-            return ledOff()
+            return ledOff("granted")
             print('granted')
             
 
@@ -65,7 +65,7 @@ def led_ON_OFF():
             #close connection
             cur.close()
 
-            return ledOn()
+            return ledOn("granted")
             print('granted')
 
 
@@ -94,7 +94,7 @@ def led_ON_OFF():
 
 
 # led process
-def ledOn():
+def ledOn(per):
     GPIO.setwarnings(False) 
     GPIO.setmode(GPIO.BOARD) 
     GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.HIGH) 
@@ -106,11 +106,12 @@ def ledOn():
 
     #response
     return json_response( 
+    permission = per,
     message="Led is ON",
     status = 200
     ) 
 
-def ledOff():
+def ledOff(per):
     GPIO.setwarnings(False) 
     GPIO.setmode(GPIO.BOARD) 
     GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.LOW) 
@@ -120,6 +121,7 @@ def ledOff():
 
     #response
     return json_response( 
+    permission = per,
     message="Led is OFF",
     status = 200
     ) 
