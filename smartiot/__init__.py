@@ -25,11 +25,11 @@ app.register_blueprint(index_bp)
 
 #auth
 app.register_blueprint(register_bp,url_prefix='/api/users/')
-app.register_blueprint(login_bp,url_prefix='/api/users/')
+app.register_blueprint(login_bp,url_prefix='/api/users/')#CHECK
 app.register_blueprint(confirm_email_bp,url_prefix='/api/users/')
 
 #settings iot sensors and stuff
-app.register_blueprint(iot_led_bp,url_prefix='/api/iot')
+app.register_blueprint(iot_led_bp,url_prefix='/api/iot')#CHECK
 app.register_blueprint(iot_pir_bp,url_prefix='/api/iot')
-app.register_blueprint(iot_ultraSonic_bp,url_prefix='/api/iot')
+app.register_blueprint(iot_ultraSonic_bp,url_prefix='/api/iot')#CHECK
 app.register_blueprint(iot_temp_bp,url_prefix='/api/iot')
