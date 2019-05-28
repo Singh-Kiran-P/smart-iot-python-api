@@ -53,6 +53,7 @@ def login_request():
         email = None,
         username = None,
         role = None,
+        FCM_token = None,
         message="Email is not confirmed. Please check your email " +email,
         status = 409
         ) 
@@ -77,6 +78,7 @@ def login_request():
         username = data['username']
         password = data['password']
         role = data['role']
+        FCM_token =data['firebase_token']
 
 
         #compare password
@@ -97,6 +99,7 @@ def login_request():
         email = email,
         username = username,
         role = role,
+        FCM_token = FCM_token,
         message="You are now logged in",
         status = 200
         ) 
