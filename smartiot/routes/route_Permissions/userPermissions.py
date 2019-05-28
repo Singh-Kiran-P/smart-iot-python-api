@@ -15,7 +15,7 @@ def getPermissions(fUserId,fEndpointName):
 
     sql =  ""   
     sql += "SELECT users.email,route_permissions.permission FROM users"
-    sql +=" INNER JOIN endpoints on users.id = endpoints.id"
+    sql +=" INNER JOIN endpoints on users.id = endpoints.userId"
     sql +=" INNER JOIN route_permissions on endpoints.permissionId = route_permissions.id"
     sql +=" WHERE users.id = "+str(fUserId)+" AND endpoints.name = '"+str(fEndpointName)+"'"
     
