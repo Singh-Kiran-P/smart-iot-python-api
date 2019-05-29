@@ -14,20 +14,12 @@ const int KNOWN_SSID_COUNT = sizeof(KNOWN_SSID) / sizeof(KNOWN_SSID[0]); // numb
 
 #define DHTPIN D4
 
-const int trigPin = 15; //D8
-const int echoPin = 12; //D5
-long duration;
-int distance;
-
 // what digital pin we're connected to
 #define DHTTYPE DHT11 // select dht type as DHT 11 or DHT22
 DHT dht(DHTPIN, DHTTYPE);
 void setup()
 {
     Serial.begin(9600);
-    delay(1000);
-    pinMode(trigPin, OUTPUT); // Sets the trigPin as an Output
-    pinMode(echoPin, INPUT);  // Sets the echoPin as an Input
 
     boolean wifiFound = false;
     int i, n;
@@ -125,31 +117,6 @@ int n = 0;
 
 void loop()
 {
-
-    /*
- * For Utlrasonic sensor distance measurement
- */
-
-    // Clears the trigPin
-    digitalWrite(trigPin, LOW);
-    delayMicroseconds(2);
-
-    // Sets the trigPin on HIGH state for 10 micro seconds
-    digitalWrite(trigPin, HIGH);
-    delayMicroseconds(10);
-    digitalWrite(trigPin, LOW);
-
-    // Reads the echoPin, returns the sound wave travel time in microseconds
-    duration = pulseIn(echoPin, HIGH);
-
-    // Calculating the distance
-    distance = duration * 0.034 / 2;
-    // Prints the distance on the Serial Monitor
-    Serial.print("Distance: ");
-    Serial.println(distance);
-    Firebase.setInt("Distance", distance);
-    delay(1000);
-
     /*
  * For TEMp sensor 
  */
