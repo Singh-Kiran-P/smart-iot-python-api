@@ -41,7 +41,7 @@ push_service = FCMNotification(
 
 # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
 
-registration_id = "ffdDgKuX44Q:APA91bF_mGMTuaHErFm_1vz-dyjZaqL0Iuv65FivoF-qu2gP_9ijAU7gjm0XKLql45sJ0TO5HHPYU88ieJAk9HoSJBUnYBee9gcs6BvUkRKoZW6omZHfQfvj77750AHLCnm7FTJb2wkT"
+registration_id = "eZeTsZDEjs4:APA91bF3i-N25eU7h7Jdpa-va8sFHyQXNEa1aCrI3AtaEA5tmqo2bZj04eIrKg-vqpuwJ2Zs_IcIL-b8Kt9o3bNbF0cIi8Ix641jBTw1e2M82J40NPeeCeBckJISr-s_8J8Aa2ELpJ-H"
 message_title = "Server"
 message_body = "SmartIot server is started"
 result = push_service.notify_single_device(
