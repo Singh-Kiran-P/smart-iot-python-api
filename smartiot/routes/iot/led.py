@@ -11,6 +11,8 @@ iot_led_bp = Blueprint(
     'iot_led_bp',
     __name__    
 )
+now = datetime.datetime.now()
+dataTime=now.strftime("%Y-%m-%d %H:%M")
 
 #define led oin
 led01_pin = 7
@@ -38,11 +40,11 @@ def led_ON_OFF():
         if action == "0":
             #mysql
             #execute query
-            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
+            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId,createdOn) VALUES('',%s,%s,%s,'1',%s,%s)"
             print(str(sql))
             #create a cursur             
             cur = mysql.connection.cursor()
-            result  = cur.execute(sql,("off","state",endpoint,userid))
+            result  = cur.execute(sql,("off","state",endpoint,userid,dataTime))
             #commit to Datebase
             mysql.connection.commit()
 
@@ -57,11 +59,11 @@ def led_ON_OFF():
         if action == "1":
             #mysql
             #execute query
-            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES('',%s,%s,%s,'1',%s)"
+            sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId,createdOn) VALUES('',%s,%s,%s,'1',%s,%s)"
             print(str(sql))
             #create a cursur             
             cur = mysql.connection.cursor()
-            result  = cur.execute(sql,("on","state",endpoint,userid))
+            result  = cur.execute(sql,("on","state",endpoint,userid,dataTime))
             #commit to Datebase
             mysql.connection.commit()
 
@@ -76,11 +78,11 @@ def led_ON_OFF():
 
         #mysql
         #execute query
-        sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId) VALUES(%s,'','',%s,'1',%s)"
+        sql ="INSERT INTO logs(info,value,dataType,deviceName,deviceId,userId,createdOn) VALUES(%s,'','',%s,'1',%s,%s)"
         print(str(sql))
         #create a cursur             
         cur = mysql.connection.cursor()
-        result  = cur.execute(sql,("Permission Denied",endpoint,userid))
+        result  = cur.execute(sql,("Permission Denied",endpoint,userid,dataTime))
         #commit to Datebase
         mysql.connection.commit()
         #close connection
@@ -124,7 +126,7 @@ def ledOn(per,token):
         # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
 
         registration_id = token
-        message_title = "Server noti"
+        message_title = "Server notifications"
         message_body = "Led01 is ON         "+str(datetime.datetime.now())
         result = push_service.notify_single_device(
         registration_id=registration_id, message_title=message_title, message_body=message_body)

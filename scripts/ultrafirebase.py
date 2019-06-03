@@ -51,6 +51,6 @@ while True:
     print('Dist : {} cm'.format(distance))
     result = firebase.put('', "distance", '%.2f cm' % distance)
     print(result)
-    # time.sleep(1)
+    time.sleep(1)
 
 GPIO.cleanup()

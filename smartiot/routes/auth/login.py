@@ -7,7 +7,10 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired
 
 from werkzeug.security import generate_password_hash, check_password_hash
 from passlib.hash import sha256_crypt
-
+from pyfcm import FCMNotification
+import datetime
+now = datetime.datetime.now()
+dataTime=now.strftime("%Y-%m-%d %H:%M")
 
 login_bp = Blueprint(
     'login',
@@ -92,17 +95,32 @@ def login_request():
             session['role'] = role
             app.logger.info('PASSWORD MATCHED')
 
+        
+            #send notification to gsm firebase
+
+            push_service = FCMNotification(
+            api_key="AAAAwTL24fI:APA91bEDQy3avVBNw2XcFLztyZ7UTFKd1RtRmf_h7V51McuyPwZp4fM0K68nYoPy1hH46FBAnVEhkkHsK8EVocHNMU9N9CSGddlB2HuhKiGJ6zN0cFhlWlTqgS37IcWgIFZJ2UurhJXy")
+
+            # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
+
+            registration_id = FCM_token
+            message_title = "Server notifications"
+            message_body = "U are now logged in on marrIott C# app  "+str(datetime.datetime.now())
+            result = push_service.notify_single_device(
+            registration_id=registration_id, message_title=message_title, message_body=message_body)
+
+
             #response
             return json_response( 
-        id = id,
-        name = naam,
-        email = email,
-        username = username,
-        role = role,
-        FCM_token = FCM_token,
-        message="You are now logged in",
-        status = 200
-        ) 
+                id = id,
+                name = naam,
+                email = email,
+                username = username,
+                role = role,
+                FCM_token = FCM_token,
+                message="You are now logged in",
+                status = 200
+                ) 
         else:
             app.logger.info('PASSWORD NOT MATCHED')    
 
