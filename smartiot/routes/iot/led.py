@@ -15,11 +15,16 @@ now = datetime.datetime.now()
 dataTime=now.strftime("%Y-%m-%d %H:%M")
 
 #define led oin
-led01_pin = 7
+led01_pin = 24
+GPIO.setwarnings(False) 
+GPIO.setmode(GPIO.BCM) 
+GPIO.setup(led01_pin, GPIO.OUT) 
+GPIO.output(led01_pin, GPIO.LOW)
 
 @iot_led_bp.route("/led",methods=['POST'])
 def led_ON_OFF():
-    
+    GPIO.output(led01_pin, GPIO.HIGH) 
+
     try:
         content = request.get_json()
         action = content['action']
@@ -100,9 +105,7 @@ def led_ON_OFF():
 
 # led process
 def ledOn(per,token):
-    GPIO.setwarnings(False) 
-    GPIO.setmode(GPIO.BOARD) 
-    GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.HIGH) 
+
     GPIO.output(led01_pin, GPIO.HIGH) 
 
 
@@ -141,9 +144,7 @@ def ledOn(per,token):
     ) 
 
 def ledOff(per,token):
-    GPIO.setwarnings(False) 
-    GPIO.setmode(GPIO.BOARD) 
-    GPIO.setup(led01_pin, GPIO.OUT, initial=GPIO.LOW) 
+
     GPIO.output(led01_pin, GPIO.LOW) 
 
     print("ledoff")
@@ -173,6 +174,6 @@ def ledOff(per,token):
     #response
     return json_response( 
     permission = per,
-    message="Led is ON",
+    message="Led is OFF",
     status = 200
     ) 

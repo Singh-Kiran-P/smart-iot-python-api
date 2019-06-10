@@ -42,10 +42,9 @@ def showLogs():
         return Response(json.dumps(jsondata), mimetype='application/json')
 
     else:
-        return json_response(
-            message="There are null logs for this user in our database",
-            status=200
-        )
+        js =[{  "message":"There are null logs for this user in our database","status":465}]
+        return Response(json.dumps(js), mimetype='application/json')
+
 
 
 @userData_bp.route('/sendFeedback', methods=['POST'])
