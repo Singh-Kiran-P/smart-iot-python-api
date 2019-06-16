@@ -105,7 +105,7 @@ def login_request():
 
             registration_id = FCM_token
             message_title = "Server notifications"
-            message_body = "U are now logged in on marrIott C# app  "+str(datetime.datetime.now())
+            message_body = "U are now logged in on SmartIOT C# app  "+str(datetime.datetime.now())
             result = push_service.notify_single_device(
             registration_id=registration_id, message_title=message_title, message_body=message_body)
 

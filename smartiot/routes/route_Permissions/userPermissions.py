@@ -9,7 +9,7 @@ email =""
 permission =""
 
 def getPermissions(fUserId,fEndpointName):
-    if fUserId == 1:
+    if fUserId is "1":
         return "granted"
     print(str(fUserId) +" "+str(fEndpointName))
 

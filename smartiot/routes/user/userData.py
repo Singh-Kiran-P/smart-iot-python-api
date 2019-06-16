@@ -27,7 +27,7 @@ def showLogs():
     cur = mysql.connection.cursor()
 
     result = cur.execute(
-        "SELECT logs.info as Permission  ,logs.value,devices.name,logs.createdOn from logs inner JOIN devices on logs.deviceId = devices.id WHERE logs.userId = %s", [userId])
+        "SELECT logs.info as Permission  ,logs.value,logs.deviceName as Eindpoint,devices.name,logs.createdOn from logs inner JOIN devices on logs.deviceId = devices.id WHERE logs.userId = %s", [userId])
 
     if result > 0:
 
@@ -42,9 +42,9 @@ def showLogs():
         return Response(json.dumps(jsondata), mimetype='application/json')
 
     else:
-        js =[{  "message":"There are null logs for this user in our database","status":465}]
+        js = [
+            {"message": "There are null logs for this user in our database", "status": 465}]
         return Response(json.dumps(js), mimetype='application/json')
-
 
 
 @userData_bp.route('/sendFeedback', methods=['POST'])
