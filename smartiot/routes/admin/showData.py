@@ -64,7 +64,7 @@ def showLogs():
     cur = mysql.connection.cursor()
 
     result = cur.execute(
-        "SELECT id,name,email,username,password,role,firebase_token,confirmed FROM users")
+        "SELECT users.name, users.role,logs.info as Permission ,logs.value,logs.deviceName as Eindpoint,devices.name,logs.createdOn from logs inner JOIN devices on logs.deviceId = devices.id INNER JOIN users on logs.userId = users.id ORDER BY `logs`.`createdOn` DESC")
 
     jsondata = []
     data = cur.fetchall()
@@ -100,7 +100,7 @@ def showFeedback():
     cur = mysql.connection.cursor()
 
     result = cur.execute(
-        "SELECT id,name,email,username,password,role,firebase_token,confirmed FROM users")
+        "SELECT * FROM feedback")
 
     jsondata = []
     data = cur.fetchall()

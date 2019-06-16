@@ -27,7 +27,7 @@ def showLogs():
     cur = mysql.connection.cursor()
 
     result = cur.execute(
-        "SELECT logs.info as Permission  ,logs.value,logs.deviceName as Eindpoint,devices.name,logs.createdOn from logs inner JOIN devices on logs.deviceId = devices.id WHERE logs.userId = %s", [userId])
+        "SELECT logs.info as Permission  ,logs.value,logs.deviceName as Eindpoint,devices.name,logs.createdOn from logs inner JOIN devices on logs.deviceId = devices.id WHERE logs.userId = %s ORDER BY `logs`.`createdOn` DESC", [userId])
 
     if result > 0:
 
@@ -49,8 +49,53 @@ def showLogs():
 
 @userData_bp.route('/sendFeedback', methods=['POST'])
 def sendFeedback():
+    content = request.get_json(force=True)
 
-    return ""
+    userId = content['userId']
+    feedback_context = content['feedback']
+    platform = content['platform']
+
+    # create a cursur
+    cur = mysql.connection.cursor()
+
+    cur.execute("INSERT INTO feedback(feedback,userId,platform) VALUES(%s,%s,%s)",
+                (feedback_context, userId, platform))
+
+    # commit to Datebase
+    mysql.connection.commit()
+
+
+    FBC = "";
+    result = cur.execute(
+        "SELECT firebase_token FROM users where username = 'admin'")
+
+    if result > 0:
+
+        data = cur.fetchone()
+        FBC = data['firebase_token']
+     
+    # close connection
+    cur.close()
+    print("POST request Register")
+
+    from pyfcm import FCMNotification
+
+    push_service = FCMNotification(
+    api_key="AAAAwTL24fI:APA91bEDQy3avVBNw2XcFLztyZ7UTFKd1RtRmf_h7V51McuyPwZp4fM0K68nYoPy1hH46FBAnVEhkkHsK8EVocHNMU9N9CSGddlB2HuhKiGJ6zN0cFhlWlTqgS37IcWgIFZJ2UurhJXy")
+
+    # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
+
+    registration_id = FBC
+    message_title = "Feedback"
+    message_body = "Feedback in your inbox open Admin account"
+    result = push_service.notify_single_device(
+    registration_id=registration_id, message_title=message_title, message_body=message_body)
+
+    print(result)
+    return json_response(status=200, message="Send succesfully")
+
+
+
 
 
 @userData_bp.route('/sendFeedback_request', methods=['POST'])
