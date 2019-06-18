@@ -406,7 +406,7 @@ def ledOff(per,token,endpoint):
         )  
     
     if endpoint == "fan01":
-        GPIO.output(led02_pin, GPIO.HIGH) 
+        GPIO.output(fan01_relay_pin, GPIO.HIGH) 
         
 
         print("fan01")
