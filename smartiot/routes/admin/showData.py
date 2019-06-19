@@ -111,14 +111,14 @@ def showFeedback():
     return Response(json.dumps(jsondata), mimetype='application/json')
 
 #DON'T WORKS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-@adminShowData_bp.route('/showFeedback_requests', methods=['GET'])
-def showFeedback_requests():
+@adminShowData_bp.route('/showPermissionRequests', methods=['GET'])
+def showPermissionRequests():
 
     # create a cursur
     cur = mysql.connection.cursor()
 
     result = cur.execute(
-        "SELECT id,name,email,username,password,role,firebase_token,confirmed FROM users")
+        "SELECT users.name ,permission_requests.*  FROM `permission_requests` inner join users on permission_requests.userId = users.id")
 
     jsondata = []
     data = cur.fetchall()

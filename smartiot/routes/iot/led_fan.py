@@ -23,15 +23,19 @@ led02_pin = 17
 led03_pin = 27
 #endpoitn fan01
 fan01_relay_pin = 20
+#endpoitn fanMain
+fan02_relay_pin = 16
 
 GPIO.setwarnings(False) 
 GPIO.setmode(GPIO.BCM) 
 GPIO.setup(led01_pin, GPIO.OUT) 
 GPIO.setup(led02_pin, GPIO.OUT) 
 GPIO.setup(fan01_relay_pin, GPIO.OUT)
+GPIO.setup(fan02_relay_pin, GPIO.OUT)
 GPIO.output(led01_pin, GPIO.LOW)
 GPIO.output(led02_pin, GPIO.LOW)
 GPIO.output(fan01_relay_pin, GPIO.HIGH)
+GPIO.output(fan02_relay_pin, GPIO.HIGH)
 
 #route -> api/iot/led
 @iot_led_bp.route("/led",methods=['POST'])
@@ -185,13 +189,13 @@ def fanON_OFF():
         mysql.connection.commit()
         #close connection
         cur.close()
-
+        print('denied#################################################################')
         #response
         return json_response( 
         message="Permission denied for this user",
         status = 403
         ) 
-        print('denied')
+      
     return"" 
 # led process
 def ledOn(per,token,endpoint):
@@ -321,6 +325,46 @@ def ledOn(per,token,endpoint):
         message="Fan01 is ON",
         status = 200
         )         
+         #fan 
+    if endpoint == "fan_main":
+        
+        GPIO.output(fan02_relay_pin, GPIO.LOW) 
+        print(endpoint)
+
+
+
+        print("fan01")
+
+
+
+        #create a cursur 
+        cur = mysql.connection.cursor()
+
+        result  = cur.execute("SELECT * FROM users WHERE firebase_token = %s ",[token])
+
+        if result > 0:
+            print(token)
+            #send notification to gsm firebase
+
+            push_service = FCMNotification(
+            api_key="AAAAwTL24fI:APA91bEDQy3avVBNw2XcFLztyZ7UTFKd1RtRmf_h7V51McuyPwZp4fM0K68nYoPy1hH46FBAnVEhkkHsK8EVocHNMU9N9CSGddlB2HuhKiGJ6zN0cFhlWlTqgS37IcWgIFZJ2UurhJXy")
+
+            # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
+
+            registration_id = token
+            message_title = "Server notifications"
+            message_body = "Main fan is ON         "+str(datetime.datetime.now())
+            result = push_service.notify_single_device(
+            registration_id=registration_id, message_title=message_title, message_body=message_body)
+
+
+
+        #response
+        return json_response( 
+        permission = per,
+        message="Main fan is ON",
+        status = 200
+        )         
     #response
 
     return json_response( 
@@ -440,7 +484,41 @@ def ledOff(per,token,endpoint):
         status = 200
         ) 
     #response
+    if endpoint == "fan_main":
+        GPIO.output(fan02_relay_pin, GPIO.HIGH) 
+        
 
+        print("fanMain")
+
+        #create a cursur 
+        cur = mysql.connection.cursor()
+
+        result  = cur.execute("SELECT * FROM users WHERE firebase_token = %s ",[token])
+
+        if result > 0:
+            print(token)
+            #send notification to gsm firebase
+
+            push_service = FCMNotification(
+            api_key="AAAAwTL24fI:APA91bEDQy3avVBNw2XcFLztyZ7UTFKd1RtRmf_h7V51McuyPwZp4fM0K68nYoPy1hH46FBAnVEhkkHsK8EVocHNMU9N9CSGddlB2HuhKiGJ6zN0cFhlWlTqgS37IcWgIFZJ2UurhJXy")
+
+            # Your api-key can be gotten from:  https://console.firebase.google.com/project/<project-name>/settings/cloudmessaging
+
+            registration_id = token
+            message_title = "Server noti"
+            message_body = "Main fan is OFF        " + str(datetime.datetime.now())
+            result = push_service.notify_single_device(
+            registration_id=registration_id, message_title=message_title, message_body=message_body)
+
+
+
+        #response
+        return json_response( 
+        permission = per,
+        message="Main fan is OFF",
+        status = 200
+        ) 
+    #response
     return json_response( 
     permission = "Denied",
     message="Eindpoint not found",
@@ -448,6 +526,20 @@ def ledOff(per,token,endpoint):
     ) 
 
 
+#route -> api/iot/led
+@iot_led_bp.route("/mainKill",methods=['DELETE'])
+def kill():
+
+    GPIO.output(led01_pin, GPIO.LOW)
+    GPIO.output(led02_pin, GPIO.LOW)
+    GPIO.output(fan01_relay_pin, GPIO.HIGH)
+    GPIO.output(fan02_relay_pin, GPIO.HIGH)
+
+    return json_response( 
+    permission = "",
+    message="Kill switch activated",
+    status = 200
+    ) 
 
 
 

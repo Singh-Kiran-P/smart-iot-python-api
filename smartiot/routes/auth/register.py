@@ -56,10 +56,11 @@ def json_register():
     checkEmail = cur.execute("SELECT * FROM users WHERE email = (%s)", [email])
     if int(checkEmail) > 0:
         return json_response(message="This email is already in use, please choose another ", status=902)
-
+    now = datetime.datetime.now()
+    dataTime=now.strftime("%Y-%m-%d %H:%M")
     # execute query
-    cur.execute("INSERT INTO users(name,email,username,password,role,firebase_token) VALUES(%s,%s,%s,%s,%s,%s)",
-                (name, email, username, password, "normal_user", firebaseToken))
+    cur.execute("INSERT INTO users(name,email,username,password,role,firebase_token,registerDate) VALUES(%s,%s,%s,%s,%s,%s,%s)",
+                (name, email, username, password, "normal_user", firebaseToken,dataTime))
 
     # commit to Datebase
     mysql.connection.commit()
